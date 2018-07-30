@@ -1,0 +1,25 @@
+dj-database-url==0.5.0
+Django==1.11.7
+gunicorn==19.8.1
+psycopg2==2.7.5
+python-decouple==3.1
+redis==2.10.6
+urlwait==0.4
+whitenoise==3.3.1
+
+pytz==2018.5
+# Using raven for sentry
+raven==6.7.0
+
+chardet==3.0.4
+django-allauth==0.35.0
+certifi==2018.4.16
+defusedxml==0.5.0
+idna==2.7
+requests==2.19.1
+urllib3==1.23
+oauthlib==2.0.7
+python3-openid==3.1.0
+requests-oauthlib==0.8.0
+
+
