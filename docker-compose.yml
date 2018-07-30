@@ -16,10 +16,10 @@ services:
     command: >
       bash -c "urlwait &&
                ./manage.py migrate &&
-               ./manage.py runserver 0.0.0.0:8000"
+               ./manage.py runserver 0.0.0.0:8100"
 
     ports:
-      - "8000:8000"
+      - "8100:8100"
 
   db:
     image: postgres:10.1
