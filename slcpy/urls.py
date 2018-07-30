@@ -17,8 +17,10 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf.urls.static import static
 from slcpy import settings
+from slcpy.home.views import home
 
 urlpatterns = [
+    url(r'^$', home),
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('allauth.urls')),
 ]

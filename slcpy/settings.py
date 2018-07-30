@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     # sentry
     'raven.contrib.django.raven_compat',
 
-    'slcpy.users'
+    'slcpy.users',
+    'slcpy.home'
 ]
 SITE_ID = 1
 
