@@ -17,11 +17,12 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf.urls.static import static
 from slcpy import settings
+from meetup.views import home_view
 
 
 urlpatterns = [
     # url(r'^$', home),
-    url(r'^$', 'meetup.views.home_view', name='home'),
+    url(r'^$', home_view, name='home'),
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('allauth.urls')),
 ]

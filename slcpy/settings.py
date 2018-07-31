@@ -49,12 +49,12 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
 
-    
     # sentry
     'raven.contrib.django.raven_compat',
 
     'slcpy.users',
-    'slcpy.home'
+    'slcpy.home',
+    'slcpy.meetup',
 ]
 SITE_ID = 1
 
