@@ -17,7 +17,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf.urls.static import static
 from slcpy import settings
-from meetup.views import home_view
+from slcpy.meetup.views import home_view
 
 
 urlpatterns = [

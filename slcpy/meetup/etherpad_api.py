@@ -7,13 +7,10 @@ DATE: Thu Sep 25 14:43:13 2014
 """
 # ########################################################################### #
 
-# import modules 
+# import modules
 
 from __future__ import print_function, division, unicode_literals
-import os 
-import sys 
-import re 
-import time
+import re
 import urllib2
 
 # ########################################################################### #
@@ -28,4 +25,4 @@ def get_mopad_html (url):
         raise ValueError("")
     request_url = "https://etherpad.mozilla.org/ep/pad/export/{}/latest?format=html".format(pad_name)
     text = urllib2.urlopen(request_url).read()
-    return text 
+    return text

@@ -7,7 +7,7 @@ DATE: Mon Sep 15 00:12:21 2014
 """
 # ########################################################################### #
 
-# import modules 
+# import modules
 
 from __future__ import print_function, division, unicode_literals
 import os
@@ -16,9 +16,10 @@ import datetime
 import pytz
 import arrow
 from django.conf import settings
-from meetup.models import EtherpadNote
-from urllib import urlencode
-from urllib2 import urlopen
+from slcpy.meetup.models import EtherpadNote
+from urllib.parse import urlencode
+from urllib.request import urlopen
+
 try:
     import json
 except ImportError:
@@ -30,14 +31,14 @@ MEETUP_GROUP_ID =  getattr(settings,'MEETUP_GROUP_ID',"")
 # ########################################################################### #
 
 def venue_google_search_url (venue_data):
-    """ 
-    
+    """
+
     Parameters
     venue_data : dict
-    
+
     Returns
     url : string
-    
+
     """
     keywords = ("{name}","{city}","{state}","{country}","{address_1}")
     search = "+".join(keywords)
@@ -46,7 +47,7 @@ def venue_google_search_url (venue_data):
     return url
 
 def from_meetup_timestamp (t,tzinfo=""):
-    """ Take time stamp from Meetup, convert to datetime 
+    """ Take time stamp from Meetup, convert to datetime
     assumes utc if not tzinfo is given
 
     Parameters
@@ -54,16 +55,16 @@ def from_meetup_timestamp (t,tzinfo=""):
     t : integer
         time in milliseconds
     tzinfo : string or pytz.timezone object
-    
+
     """
     # convert to structured time
-    struct_time = time.gmtime(int(t) / 1000.0)    
+    struct_time = time.gmtime(int(t) / 1000.0)
     # get datetime object
     keys = ['year','month','day','hour','minute','second']
     kws = {k:struct_time[i] for i,k in enumerate(keys)}
     kws['tzinfo'] = pytz.utc
     dt = arrow.Arrow(**kws)
-        
+
     # apply timezone info if needed
     if isinstance(tzinfo,datetime.tzinfo):
         return dt.to(tzinfo)
@@ -80,15 +81,15 @@ def to_meetup_timestamp (ts):
 
 def enrich_event_data (event_data,tzinfo=""):
     """ Add fields to meetup event_data
-    
+
     Parameters
     event_data : dict
-    
+
     Returns
     event_data : dict
         Added fields, Note that this modifies the input event_data by reference
         as well
-    
+
     """
     if event_data['status'] == "upcoming":
         event_data['css_style'] = "panel-success"
@@ -103,75 +104,75 @@ def enrich_event_data (event_data,tzinfo=""):
 
 class MeetupClient(object):
     """ MeetupClient """
-    
+
     api_meetup_url = "https://api.meetup.com"
-    
+
     def __init__(self, api_key):
         """ Find your api_key from https://secure.meetup.com/meetup_api/key/"""
-        self.api_key = api_key    
-                
+        self.api_key = api_key
+
     def signed_request_url (self,meetup_method,params=None,request_hash=None):
-        """ To GET data from api.meetup.com 
-        
-        """                
-        # get the parameters 
+        """ To GET data from api.meetup.com
+
+        """
+        # get the parameters
         params = params.copy() if params is not None else {}
         params['signed'] = True
-        
+
         response = self.http_response(meetup_method,params,method='GET')
         signed_url = response['signed_url']
         return signed_url
-    
+
     def http_response (self, meetup_method, params=None, method='GET'):
         """ For request http response from meetup
-        
+
         Parameters
         meetup_method : string
             see http://www.meetup.com/meetup_api/docs/
         params : dict or None
-            parameters passed to the request                    
-        method : string  
+            parameters passed to the request
+        method : string
             'GET' or 'POST'
-        
+
         Returns
         response : dict
-        
+
         """
-        # TODO: rename http_response to http_response        
-        
-        # get the parameters 
+        # TODO: rename http_response to http_response
+
+        # get the parameters
         params = params.copy() if params is not None else {}
         params['key'] = self.api_key
         params['page'] = 1000
-                
+
         # the specific meetup method
         # see http://www.meetup.com/meetup_api/docs/
         if meetup_method.startswith("/"):
-            meetup_method = meetup_method[1:]        
+            meetup_method = meetup_method[1:]
         url = os.path.join(self.api_meetup_url,meetup_method)
-        
+
         # get response
         if method == 'GET':
             return self._get(url, params)
         elif method == 'POST':
             return self._post(url, params)
-    
+
     def _get(self, url, params):
         url = "{}?{}".format(url, urlencode(params))
         content = urlopen(url).read()
         content = unicode(content, 'utf-8', 'ignore')
         return json.loads(content)
-        
+
     def _post(self, url, params):
         content = urlopen(url, urlencode(params)).read()
         content = unicode(content, 'utf-8', 'ignore')
         return json.load(content)
-    
+
     def get_group_events (self,group_id=None):
         if group_id is None:
             group_id = settings.MEETUP_GROUP_ID
         return self.http_response("/2/events",params=dict(group_id=group_id))['results']
-      
+
     def get_next_group_event (self,group_id=MEETUP_GROUP_ID,tzinfo="utc"):
         """ Recover the next upcoming event for a group
 
@@ -180,7 +181,7 @@ class MeetupClient(object):
 
         Parameters
         ----------
-        group_id : int or str 
+        group_id : int or str
             meetup group_id
 
         Returns
@@ -193,7 +194,7 @@ class MeetupClient(object):
         params = dict(group_id=group_id,status="upcoming")
         events = self.http_response("/2/events",params=params)['results']
         if not len(events):
-            return        
+            return
         next_event = events[0]
         return enrich_event_data(next_event,tzinfo)
 
@@ -205,40 +206,40 @@ class MeetupClient(object):
         for i in range(len(events)):
             enrich_event_data(events[i],tzinfo)
         return list(reversed(events))
-            
+
     def get_group_info (self,group_id=None):
         if group_id is None:
             group_id = settings.MEETUP_GROUP_ID
-        return self.http_response("/2/groups",params=dict(group_id=group_id))['results']            
-                          
+        return self.http_response("/2/groups",params=dict(group_id=group_id))['results']
+
 meetup_client = MeetupClient(MEETUP_API_KEY)
 
 # ########################################################################### #
 
-# For tracking etherpad 
+# For tracking etherpad
 
 def find_etherpad_urls (meetup_client,event_id):
     """ Find all etherpad urls for a given meetup event by searching the comments
-    
+
     Parameters
     meetup_client : MeetupClient
-    event_id : int or string 
-        The meetup event_id 
-    
+    event_id : int or string
+        The meetup event_id
+
     """
     # regular expression to match etherpad urls
-    regex = "(http(s)?://etherpad.mozilla.org/[a-z,A-Z,0-9,_,-,$]*)"        
+    regex = "(http(s)?://etherpad.mozilla.org/[a-z,A-Z,0-9,_,-,$]*)"
     if isinstance(event_id,basestring):
         event_id = int(event_id)
     # get all event comments
     params = dict(event_id=event_id)
-    comments = meetup_client.http_response("/2/event_comments",params=params)['results']    
+    comments = meetup_client.http_response("/2/event_comments",params=params)['results']
     # search each comment for etherpad urls
     etherpad_urls = []
     for comment in comments:
         s = re.search(regex,comment['comment'])
         if s is not None:
-            etherpad_urls.append(s.groups()[0])            
+            etherpad_urls.append(s.groups()[0])
     return etherpad_urls
 
 def add_etherpad_urls (event_data):
@@ -248,6 +249,3 @@ def add_etherpad_urls (event_data):
     #etherpad_urls = find_etherpad_urls(event_id)
     #event_data['etherpad_urls'] = etherpad_urls
     return event_data
-
-
-

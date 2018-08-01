@@ -12,9 +12,9 @@ from django.conf import settings
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 
-from meetup.api import meetup_client, add_etherpad_urls
-from urllib2 import HTTPError
-import urllib2
+from slcpy.meetup.api import meetup_client, add_etherpad_urls
+from urllib.request import urlopen
+import urllib
 
 SLCPY_MEETUP_URL = settings.SLCPY_MEETUP_URL
 USE_TZ = getattr(settings, "USE_TZ", True)
@@ -113,9 +113,9 @@ def meetup_home_view(request):
     headers = {'User-Agent': user_agent}
     context_dict = {'request-url': url}
     try:
-        req = urllib2.Request(url, headers=headers)
-        response = urllib2.urlopen(req).read()
-    except urllib2.URLError as e:
+        req = urllib.Request(url, headers=headers)
+        response = urlopen(req).read()
+    except urllib.URLError as e:
         raise e
     context_dict["meetup_home"] = response
     return render_to_response("meetup/meetup_home.html", context_dict, context)
