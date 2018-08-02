@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "slcpy.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "slcpy.settings.slcpy")
 
 application = get_wsgi_application()
