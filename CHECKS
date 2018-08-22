@@ -1,4 +1,4 @@
 TIMEOUT=3
 ATTEMPTS=2
 
-/ SLCPython
+https://slcpy.com/ SLCPython
