@@ -1,0 +1,4 @@
+TIMEOUT=3
+ATTEMPTS=2
+
+/ SLCPython
