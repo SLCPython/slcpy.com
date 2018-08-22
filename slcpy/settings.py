@@ -15,6 +15,7 @@ import os
 import dj_database_url
 
 from decouple import config, Csv
+from socket import gethostname, gethostbyname
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -31,11 +32,15 @@ SECRET_KEY = config(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS',
-                       default='localhost', cast=Csv())
+ALLOWED_HOSTS = [
+    config(
+        'ALLOWED_HOSTS',
+        default='localhost', cast=Csv()),
+    gethostname(),
+    gethostbyname(gethostname())]
 
 
-DJANGO_APPS =[
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
