@@ -24,8 +24,9 @@ HOME_DIR = os.path.realpath(os.path.join(BASE_DIR, '..'))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY',
-                    default='zs$zd9my5&ob&v56s=!3s1#rbk(%rajxbkrjtbsz1+&)9*k-7b')
+SECRET_KEY = config(
+    'SECRET_KEY',
+    default='zs$zd9my5&ob&v56s=!3s1#rbk(%rajxbkrjtbsz1+&)9*k-7b')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
@@ -34,9 +35,7 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS',
                        default='localhost', cast=Csv())
 
 
-# Application definition
-
-INSTALLED_APPS = [
+DJANGO_APPS =[
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,18 +43,25 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+]
+
+THIRD_PARTY_APPS = [
     # allauth
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
 
-    
     # sentry
     'raven.contrib.django.raven_compat',
+]
 
+INTERNAL_APPS = [
     'slcpy.users',
     'slcpy.home'
 ]
+
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + INTERNAL_APPS
+
 SITE_ID = 1
 
 MIDDLEWARE = [
@@ -93,14 +99,14 @@ WSGI_APPLICATION = 'slcpy.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DEFAULT_DATABASE = config('DATABASE_URL',
-                          default='postgres://cramstack:cramstack@localhost:5432/cramstack',
-                          cast=dj_database_url.parse)
+DEFAULT_DATABASE = config(
+    'DATABASE_URL',
+    default='postgres://cramstack:cramstack@localhost:5432/cramstack',
+    cast=dj_database_url.parse)
 
 DATABASES = {
     'default': DEFAULT_DATABASE
 }
-
 
 
 # Password validation
@@ -108,16 +114,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',  # noqa
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',  # noqa
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',  # noqa
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',  # noqa
     },
 ]
 
