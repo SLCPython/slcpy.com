@@ -35,7 +35,7 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS',
                        default='localhost', cast=Csv())
 
 
-DJANGO_APPS =[
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -154,6 +154,10 @@ MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
 
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder'
+]
 
 AUTH_USER_MODEL = 'users.User'
 
