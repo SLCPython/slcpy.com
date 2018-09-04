@@ -32,10 +32,14 @@ SECRET_KEY = config(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
+try:
+    ALLOWED_HOST_FROM_CONFIG = config('ALLOWED_HOSTS', default='localhost', cast=Csv())[0]
+except IndexError:
+    ALLOWED_HOST_FROM_CONFIG = 'localhost'
+
+
 ALLOWED_HOSTS = [
-    config(
-        'ALLOWED_HOSTS',
-        default='localhost', cast=Csv()),
+    ALLOWED_HOST_FROM_CONFIG,
     gethostname(),
     gethostbyname(gethostname())]
 
