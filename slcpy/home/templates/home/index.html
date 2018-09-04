@@ -1,17 +1,26 @@
 {% extends "home/_base.html" %}
+{% load static %}
 
 {% block title %}
 SLCPython
 {% endblock %}
 
 {% block content %}
-  <p>
-  Howdy SLCPythoners. We're re-constructing the site to be more robust and
-  devops-friendly. Please check back in mid-August 2018.
-  </p>
+    <pre>
+      <code class="python">
+        >>> from utah import slcpython
+        >>> slcpython.howdy()
+        Howdy, Salt Lake City!
+        "Our next meetup is on:"
+        "{{ next_meetup.date|date:"l, F jS" }}, at {{ next_meetup.date|date:'P' }}"
+        "and is about:"
+        "A trio of python talks: Beginning / Intermediate / Advanced"
+      </code>
+    </pre>
 
-  <p>
-  Until then, please visit our main meetup site:
-  <a href="https://meetup.com/SLCPython">meetup.com/SLCPython</a>
-  </p>
+  <div>
+    <a href="https://meetup.com/SLCPython" target="_blank" role="button" class="btn btn-danger btn-lg btn-block">
+      Join Us
+    </a>
+  </div>
 {% endblock %}
