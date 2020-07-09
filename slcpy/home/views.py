@@ -7,7 +7,7 @@ def home(request):
     template = "home/index.html"
     ctx = {
         'next_meetup': {
-            'date': timezone.datetime(2018, 9, 5, 18, 30)
+            'date': timezone.datetime(2020, 7, 8, 17, 30)
         }
     }
     return render(request, template, ctx)
